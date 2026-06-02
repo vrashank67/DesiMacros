@@ -180,6 +180,7 @@ footer .ftag { display: inline-block; padding: .1rem .4rem; background: var(--ta
           <th>Category</th>
           <th class="sort" data-c="cal" style="text-align:right">Calories <span class="si" id="si-cal"></span></th>
           <th class="sort" data-c="protein" style="text-align:right">Protein (g) <span class="si" id="si-protein"></span></th>
+          <th class="sort" data-c="calPerProtein" style="text-align:right">Cal/g Protein <span class="si" id="si-calPerProtein"></span></th>
           <th class="sort" data-c="carbs" style="text-align:right">Carbs (g) <span class="si" id="si-carbs"></span></th>
           <th class="sort" data-c="fat" style="text-align:right">Fat (g) <span class="si" id="si-fat"></span></th>
           <th>Serving note</th>
@@ -528,7 +529,7 @@ const DATA = [
 const ALL = [];
 const cats = new Set();
 DATA.forEach(c => c.items.forEach(item => {
-  ALL.push({...item, chainName: c.chain, chainColor: c.color});
+  ALL.push({...item, chainName: c.chain, chainColor: c.color, calPerProtein: item.protein > 0 ? item.cal / item.protein : null});
   cats.add(item.cat);
 }));
 
@@ -546,7 +547,7 @@ const UP = (on) => `<svg width="8" height="5" viewBox="0 0 8 5"><path d="M4 0L8 
 const DN = (on) => `<svg width="8" height="5" viewBox="0 0 8 5"><path d="M4 5L0 0H8z" fill="${on?'var(--accent)':'currentColor'}" opacity="${on?1:.25}"/></svg>`;
 
 function refreshIcons() {
-  ['name','chain','cal','protein','carbs','fat'].forEach(c => {
+  ['name','chain','cal','protein','calPerProtein','carbs','fat'].forEach(c => {
     const el = document.getElementById('si-'+c);
     if (!el) return;
     const a = col===c;
@@ -595,7 +596,7 @@ function render() {
   const tb = document.getElementById('tb');
 
   if (!rows.length) {
-    tb.innerHTML = `<tr><td colspan="9" class="empty">
+    tb.innerHTML = `<tr><td colspan="10" class="empty">
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 9h.01M15 9h.01"/></svg><br>No items match your filters.</td></tr>`;
     refreshIcons(); return;
   }
@@ -610,7 +611,7 @@ function render() {
     order.forEach(chainName => {
       const cr = rows.filter(r=>r.chainName===chainName);
       if (!cr.length) return;
-      html += `<tr class="gr"><td colspan="9"><span class="gpip" style="background:${cr[0].chainColor}"></span>${chainName}<span style="opacity:.45;font-weight:400"> &nbsp;&middot;&nbsp; ${cr.length} item${cr.length>1?'s':''}</span></td></tr>`;
+      html += `<tr class="gr"><td colspan="10"><span class="gpip" style="background:${cr[0].chainColor}"></span>${chainName}<span style="opacity:.45;font-weight:400"> &nbsp;&middot;&nbsp; ${cr.length} item${cr.length>1?'s':''}</span></td></tr>`;
       cr.forEach(item => { html += row(item, false); });
     });
   } else {
@@ -631,6 +632,7 @@ function row(item, showChain) {
     <td><span class="catb">${item.cat}</span></td>
     <td class="cal"><div class="cbar-wrap"><span>${fmt(item.cal)}</span><span class="cbar"><span class="cbar-fill" style="width:${cw};background:${cc}"></span></span></div></td>
     <td class="pro">${fmt(item.protein)}g</td>
+    <td class="calPerProtein">${item.calPerProtein != null ? fmt(item.calPerProtein) : '&mdash;'}</td>
     <td class="crb">${fmt(item.carbs)}g</td>
     <td class="fat">${fmt(item.fat)}g</td>
     <td class="note">${item.note||''}</td>
