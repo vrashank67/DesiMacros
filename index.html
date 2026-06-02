@@ -106,6 +106,22 @@ footer a { color: var(--muted); text-decoration: underline; text-underline-offse
 footer a:hover { color: var(--accent); }
 footer .ftag { display: inline-block; padding: .1rem .4rem; background: var(--tag-bg); border-radius: 4px; font-size: .65rem; margin: 0 .15rem; }
 
+/* About section */
+.about { margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+.about-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: .9rem 1.2rem; background: none; border: none; cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: .82rem; font-weight: 500; color: var(--text); letter-spacing: .02em; }
+.about-toggle svg { transition: transform .25s ease; }
+.about.open .about-toggle svg { transform: rotate(180deg); }
+.about-body { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; padding: 0 1.2rem; }
+.about.open .about-body { max-height: 800px; padding: 0 1.2rem 1.2rem; }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; border-top: 1px solid var(--border); padding-top: 1.2rem; }
+.about-grid h3 { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; margin-bottom: .5rem; }
+.about-grid p { font-size: .82rem; line-height: 1.65; color: var(--text); }
+.about-grid a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.about-grid a:hover { opacity: .8; }
+.about-full { grid-column: 1 / -1; }
+.about-grid .ftag { display: inline-block; padding: .1rem .4rem; background: var(--tag-bg); border-radius: 4px; font-size: .7rem; margin: .15rem; }
+@media(max-width:550px){ .about-grid { grid-template-columns: 1fr; } }
+
 /* Responsive */
 @media(max-width:650px){
   header{padding:1rem}
@@ -172,12 +188,42 @@ footer .ftag { display: inline-block; padding: .1rem .4rem; background: var(--ta
       <tbody id="tb"></tbody>
     </table>
   </div>
+
+  <div class="about" id="about">
+    <button class="about-toggle" onclick="document.getElementById('about').classList.toggle('open')">
+      <span>About DesiMacros</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="about-body">
+      <div class="about-grid">
+        <div>
+          <h3>What is this?</h3>
+          <p><strong>DesiMacros</strong> is a curated directory of nutrition information for popular Indian fast-food &amp; restaurant chains — all from official sources. Every item includes calories, protein, carbs, fat, and a serving note so you can make informed choices without hunting through PDFs.</p>
+        </div>
+        <div>
+          <h3>Data Sources</h3>
+          <p>All values come from official brand websites, FSSAI-compliant nutrition booklets, published menus, and manufacturer-provided nutritional information (FatSecret Branded Entries). We only include chains that have made their data publicly available.</p>
+        </div>
+        <div>
+          <h3>12 Chains &amp; Counting</h3>
+          <p><span class="ftag">McDonald's India</span> <span class="ftag">Burger King India</span> <span class="ftag">Subway India</span> <span class="ftag">Pizza Hut India</span> <span class="ftag">KFC India</span> <span class="ftag">Taco Bell India</span> <span class="ftag">Domino's India</span> <span class="ftag">Starbucks India</span> <span class="ftag">Wow! Momo</span> <span class="ftag">Faasos</span> <span class="ftag">California Burrito India</span> <span class="ftag">Haldiram's</span></p>
+        </div>
+        <div>
+          <h3>Disclaimer</h3>
+          <p>Values are approximate and may vary by location, recipe changes, and preparation. Always check the restaurant's current menu for the most up-to-date information. Not affiliated with any of the listed brands.</p>
+        </div>
+        <div class="about-full">
+          <h3>Contributing</h3>
+          <p>Know a chain we're missing? Found an error? Open an issue or PR on <a href="https://github.com/vrashank67/DesiMacros" target="_blank">GitHub</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer>
-  Nutrition data sourced from official brand websites, FSSAI-compliant nutrition booklets &amp; published menus.
-  Values are approximate and may vary by location &amp; preparation. Per serving unless noted.
-  <br>Last updated: June 2026 &middot; <span class="ftag">McDonald's India</span> <span class="ftag">Burger King India</span> <span class="ftag">Subway India</span> <span class="ftag">Pizza Hut India</span> <span class="ftag">KFC India</span> <span class="ftag">Taco Bell India</span> <span class="ftag">Domino's India</span> <span class="ftag">Starbucks India</span> <span class="ftag">Wow! Momo</span> <span class="ftag">Faasos</span> <span class="ftag">California Burrito India</span> <span class="ftag">Haldiram's</span>
+  <a href="https://github.com/vrashank67/DesiMacros" target="_blank">DesiMacros</a> &middot;
+  Nutrition data from official brand sources &middot; Last updated: June 2026
 </footer>
 
 <script>
