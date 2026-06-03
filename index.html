@@ -3,668 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>DesiMacros — Indian Fast Food Nutrition Data</title>
+<title>DesiMacros — Indian Fast Food Nutrition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #f5f3ee; --surface: #fff; --border: #e4dfd3; --text: #1a1714;
-  --muted: #7a7369; --accent: #c8521a; --green: #2a7a3b; --red: #b83232;
-  --th-bg: #efebe3; --row-hover: #faf8f4; --header: #1a1714;
-  --cal-low: #2a7a3b; --cal-mid: #b87a1a; --cal-high: #b83232;
-  --tag-bg: #f0ece4; --gold: #d4a853;
-}
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
-
-/* HEADER */
-header { background: var(--header); color: #fff; padding: 1.4rem 2rem 1rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 16px rgba(0,0,0,0.25); }
-.hinner { max-width: 1400px; margin: 0 auto; }
-.htop { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: .75rem; }
-h1 { font-family: 'DM Serif Display', serif; font-size: 1.55rem; font-weight: 400; letter-spacing: -.02em; line-height: 1; }
-h1 span { color: #e8966a; }
-.hmeta { font-size: .68rem; color: rgba(255,255,255,.38); letter-spacing: .06em; text-transform: uppercase; margin-top: .3rem; }
-.subtitle { font-size: .75rem; color: rgba(255,255,255,.5); margin-top: .15rem; }
-.stats { display: flex; gap: 1.5rem; }
-.snum { font-size: 1.35rem; font-weight: 300; color: #e8966a; line-height: 1; }
-.slbl { font-size: .62rem; color: rgba(255,255,255,.38); text-transform: uppercase; letter-spacing: .06em; }
-.controls { display: flex; gap: .55rem; flex-wrap: wrap; align-items: center; }
-.sw { position: relative; flex: 1; min-width: 170px; max-width: 280px; }
-.sw svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: .3; pointer-events: none; }
-input[type=text] { width: 100%; padding: .5rem .75rem .5rem 2.1rem; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 7px; color: #fff; font-family: 'DM Sans',sans-serif; font-size: .82rem; outline: none; }
-input::placeholder { color: rgba(255,255,255,.28); }
-input:focus { border-color: rgba(255,255,255,.32); background: rgba(255,255,255,.12); }
-select { padding: .5rem 1.8rem .5rem .7rem; background: rgba(255,255,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='rgba(255,255,255,.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center; border: 1px solid rgba(255,255,255,.12); border-radius: 7px; color: #fff; font-family: 'DM Sans',sans-serif; font-size: .82rem; outline: none; appearance: none; cursor: pointer; }
-select option { background: #2a2420; }
-select:focus { border-color: rgba(255,255,255,.32); }
-.pills { display: flex; gap: .4rem; }
-.pill { padding: .4rem .8rem; border-radius: 100px; border: 1px solid rgba(255,255,255,.16); background: transparent; color: rgba(255,255,255,.5); font-family: 'DM Sans',sans-serif; font-size: .78rem; cursor: pointer; transition: all .15s; white-space: nowrap; }
-.pill:hover { color: #fff; border-color: rgba(255,255,255,.35); }
-.pill.active { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.38); color: #fff; }
-
-/* MAIN */
-main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
-.twrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.06); overflow-x: auto; }
-
-/* TABLE */
-table { width: 100%; border-collapse: collapse; min-width: 800px; }
-thead { position: sticky; top: 0; z-index: 10; }
-th { background: var(--th-bg); padding: .6rem .7rem; font-size: .65rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; white-space: nowrap; cursor: default; user-select: none; }
-th.sort { cursor: pointer; }
-th.sort:hover { color: var(--text); }
-th.active { color: var(--text); }
-th .si { display: inline-flex; flex-direction: column; vertical-align: middle; margin-left: 4px; gap: 1px; line-height: 0; }
-td { padding: .5rem .7rem; font-size: .82rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--row-hover); }
-tr.gr td { background: #f0ece4; font-weight: 600; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; padding-top: .65rem; padding-bottom: .65rem; color: var(--muted); cursor: default; }
-
-/* Veg/Non-veg dot */
-.vd { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
-.vd.veg { background: var(--green); box-shadow: 0 0 0 1.5px rgba(42,122,59,.25); }
-.vd.non-veg { background: var(--red); box-shadow: 0 0 0 1.5px rgba(184,50,50,.25); }
-
-.iname { font-weight: 500; white-space: nowrap; }
-.cc { display: flex; align-items: center; gap: 6px; }
-.cp { display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-.cl { white-space: nowrap; }
-
-.catb { display: inline-block; padding: .15rem .45rem; background: var(--tag-bg); border-radius: 4px; font-size: .68rem; color: var(--muted); white-space: nowrap; }
-
-/* Calorie bar */
-.cal { white-space: nowrap; }
-.cbar-wrap { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
-.cbar { display: inline-block; width: 38px; height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
-.cbar-fill { display: block; height: 100%; border-radius: 3px; transition: width .2s; }
-
-.pro { text-align: right; white-space: nowrap; }
-.calPerProtein { text-align: right; white-space: nowrap; color: var(--muted); font-size: .75rem; }
-.crb { text-align: right; white-space: nowrap; }
-.fat { text-align: right; white-space: nowrap; }
-.note { max-width: 160px; font-size: .72rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.calColor { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
-
-.gpip { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
-
-.empty { text-align: center; padding: 4rem 2rem; color: var(--muted); }
-.empty svg { margin-bottom: 1rem; opacity: .3; }
-footer { text-align: center; padding: 1.5rem 2rem; font-size: .7rem; color: var(--muted); border-top: 1px solid var(--border); max-width: 1400px; margin: 0 auto; line-height: 1.6; }
-footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
-footer a:hover { color: var(--accent); }
-footer .ftag { display: inline-block; padding: .1rem .4rem; background: var(--tag-bg); border-radius: 4px; font-size: .65rem; margin: 0 .15rem; }
-
-/* About section */
-.about { margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
-.about-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: .9rem 1.2rem; background: none; border: none; cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: .82rem; font-weight: 500; color: var(--text); letter-spacing: .02em; }
-.about-toggle svg { transition: transform .25s ease; }
-.about.open .about-toggle svg { transform: rotate(180deg); }
-.about-body { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; padding: 0 1.2rem; }
-.about.open .about-body { max-height: 800px; padding: 0 1.2rem 1.2rem; }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; border-top: 1px solid var(--border); padding-top: 1.2rem; }
-.about-grid h3 { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; margin-bottom: .5rem; }
-.about-grid p { font-size: .82rem; line-height: 1.65; color: var(--text); }
-.about-grid a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
-.about-grid a:hover { opacity: .8; }
-.about-full { grid-column: 1 / -1; }
-.about-grid .ftag { display: inline-block; padding: .1rem .4rem; background: var(--tag-bg); border-radius: 4px; font-size: .7rem; margin: .15rem; }
-@media(max-width:550px){ .about-grid { grid-template-columns: 1fr; } }
-
-/* Responsive */
-@media(max-width:650px){
-  header{padding:1rem}
-  main{padding:1rem}
-  .stats{display:none}
-  h1{font-size:1.2rem}
-  .hmeta{font-size:.6rem}
-  .controls{gap:.35rem}
-  .sw{min-width:120px;max-width:180px}
-  td{padding:.45rem .5rem;font-size:.78rem}
-  th{padding:.5rem .5rem;font-size:.62rem}
-  td:nth-child(1){padding-left:.6rem}
-  .note{max-width:120px}
-  .catb{font-size:.62rem;padding:.1rem .35rem}
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f5f3ee;--surface:#fff;--border:#e4dfd3;--text:#1a1714;--muted:#7a7369;--accent:#c8521a;--green:#2a7a3b;--red:#b83232;--th-bg:#efebe3;--row-hover:#faf8f4;--header:#1a1714;--tag-bg:#f0ece4}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+header{background:var(--header);color:#fff;padding:1.4rem 2rem 1rem;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.hinner{max-width:1400px;margin:0 auto}
+.htop{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem}
+h1{font-family:'DM Serif Display',serif;font-size:1.55rem;font-weight:400;letter-spacing:-.02em;line-height:1}
+h1 span{color:#e8966a}
+.hmeta{font-size:.68rem;color:rgba(255,255,255,.38);letter-spacing:.06em;text-transform:uppercase;margin-top:.3rem}
+.subtitle{font-size:.75rem;color:rgba(255,255,255,.5);margin-top:.15rem}
+.stats{display:flex;gap:1.5rem}
+.snum{font-size:1.35rem;font-weight:300;color:#e8966a;line-height:1}
+.slbl{font-size:.62rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.06em}
+.controls{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center}
+.sw{position:relative;flex:1;min-width:170px;max-width:280px}
+.sw svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.3;pointer-events:none}
+input[type=text]{width:100%;padding:.5rem .75rem .5rem 2.1rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#fff;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none}
+input::placeholder{color:rgba(255,255,255,.28)}
+input:focus{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.12)}
+select{padding:.5rem 1.8rem .5rem .7rem;background:rgba(255,255,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='rgba(255,255,255,.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#fff;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;appearance:none;cursor:pointer}
+select option{background:#2a2420}
+select:focus{border-color:rgba(255,255,255,.32)}
+.pills{display:flex;gap:.4rem}
+.pill{padding:.4rem .8rem;border-radius:100px;border:1px solid rgba(255,255,255,.16);background:transparent;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.pill:hover{color:#fff;border-color:rgba(255,255,255,.35)}
+.pill.active{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.38);color:#fff}
+main{max-width:1400px;margin:0 auto;padding:1.5rem 2rem 3rem}
+.twrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:800px}
+thead{position:sticky;top:0;z-index:10}
+th{background:var(--th-bg);padding:.6rem .7rem;font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;white-space:nowrap;cursor:default;user-select:none}
+th.sort{cursor:pointer}
+th.sort:hover{color:var(--text)}
+th.active{color:var(--text)}
+th .si{display:inline-flex;flex-direction:column;vertical-align:middle;margin-left:4px;gap:1px;line-height:0}
+td{padding:.5rem .7rem;font-size:.82rem;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--row-hover)}
+tr.gr td{background:#f0ece4;font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;padding-top:.65rem;padding-bottom:.65rem;color:var(--muted);cursor:default}
+.vd{display:inline-block;width:7px;height:7px;border-radius:50%}
+.vd.veg{background:var(--green);box-shadow:0 0 0 1.5px rgba(42,122,59,.25)}
+.vd.non-veg{background:var(--red);box-shadow:0 0 0 1.5px rgba(184,50,50,.25)}
+.iname{font-weight:500;white-space:nowrap}
+.cc{display:flex;align-items:center;gap:6px}
+.cp{display:inline-block;width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.cl{white-space:nowrap}
+.catb{display:inline-block;padding:.15rem .45rem;background:var(--tag-bg);border-radius:4px;font-size:.68rem;color:var(--muted);white-space:nowrap}
+.cal{white-space:nowrap}
+.cbar-wrap{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.cbar{display:inline-block;width:38px;height:4px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0}
+.cbar-fill{display:block;height:100%;border-radius:3px;transition:width .2s}
+.cnum{font-variant-numeric:tabular-nums}
+.srchint{font-size:.85rem;color:var(--muted);padding:.5rem 0;text-align:center;border-bottom:1px solid var(--border)}
+footer{max-width:1400px;margin:0 auto;padding:1rem 2rem 2rem;font-size:.72rem;color:var(--muted);line-height:1.6}
+footer a{color:var(--accent)}
 </style>
 </head>
 <body>
+
 <header>
-  <div class="hinner">
-    <div class="htop">
-      <div>
-        <h1>Desi<span>Macros</span></h1>
-        <div class="subtitle">Indian fast food &amp; restaurant nutrition data from official sources</div>
-        <div class="hmeta">Last updated: June 2026</div>
-      </div>
-      <div class="stats">
-        <div><div class="snum" id="ss">&mdash;</div><div class="slbl">Showing</div></div>
-        <div><div class="snum" id="st">&mdash;</div><div class="slbl">Total items</div></div>
-        <div><div class="snum" id="sc">&mdash;</div><div class="slbl">Chains</div></div>
-      </div>
-    </div>
-    <div class="controls">
-      <div class="sw">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="search" placeholder="Search items, chains&hellip;" autocomplete="off">
-      </div>
-      <select id="cf"><option value="">All chains</option></select>
-      <select id="catf"><option value="">All categories</option></select>
-      <div class="pills">
-        <button class="pill active" data-t="all">All</button>
-        <button class="pill" data-t="veg">🟢 Veg</button>
-        <button class="pill" data-t="non-veg">🔴 Non-veg</button>
-      </div>
-    </div>
-  </div>
+<div class="hinner">
+<div class="htop">
+<div>
+<h1>Desi<span>Macros</span></h1>
+<div class="hmeta">Indian Fast-Food Nutrition</div>
+</div>
+<div class="stats" id="stats"></div>
+</div>
+<div class="controls">
+<div class="sw">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+<input id="search" type="text" placeholder="Search items..." oninput="render()">
+</div>
+<select id="chainFilter" onchange="render()">
+<option value="all">All Chains</option>
+</select>
+<div class="pills" id="pills"></div>
+</div>
+</div>
 </header>
 
 <main>
-  <div class="twrap">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th class="sort" data-c="name">Item <span class="si" id="si-name"></span></th>
-          <th class="sort" data-c="chain">Chain <span class="si" id="si-chain"></span></th>
-          <th>Category</th>
-          <th class="sort" data-c="cal" style="text-align:right">Calories <span class="si" id="si-cal"></span></th>
-          <th class="sort" data-c="protein" style="text-align:right">Protein (g) <span class="si" id="si-protein"></span></th>
-          <th class="sort" data-c="calPerProtein" style="text-align:right">Cal/g Protein <span class="si" id="si-calPerProtein"></span></th>
-          <th class="sort" data-c="carbs" style="text-align:right">Carbs (g) <span class="si" id="si-carbs"></span></th>
-          <th class="sort" data-c="fat" style="text-align:right">Fat (g) <span class="si" id="si-fat"></span></th>
-          <th>Serving note</th>
-        </tr>
-      </thead>
-      <tbody id="tb"></tbody>
-    </table>
-  </div>
-
-  <div class="about" id="about">
-    <button class="about-toggle" onclick="document.getElementById('about').classList.toggle('open')">
-      <span>About DesiMacros</span>
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="about-body">
-      <div class="about-grid">
-        <div>
-          <h3>What is this?</h3>
-          <p><strong>DesiMacros</strong> is a curated directory of nutrition information for popular Indian fast-food &amp; restaurant chains — all from official sources. Every item includes calories, protein, carbs, and fat so you can make informed choices without hunting through PDFs.</p>
-        </div>
-        <div>
-          <h3>Data Sources</h3>
-          <p>Values come from official brand websites, FSSAI-compliant nutrition booklets, published menus, and manufacturer-provided nutritional information (FatSecret Branded Entries). We only include chains that have made their data publicly available.</p>
-        </div>
-        <div>
-          <h3>18+ Chains &amp; Counting</h3>
-          <p id="chainList"></p>
-        </div>
-        <div>
-          <h3>Disclaimer</h3>
-          <p>Values are approximate and may vary by location, recipe changes, and preparation. Always check the restaurant's current menu for the most up-to-date information. Not affiliated with any of the listed brands.</p>
-        </div>
-        <div class="about-full">
-          <h3>Accuracy &amp; Contributions</h3>
-          <p>We strive for accuracy using verified, sourced data. Know a chain we're missing? Found an error? Contributions and corrections are welcome.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="twrap">
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th class="sort" data-col="chain" onclick="sortBy('chain')">Chain <span class="si">▲▼</span></th>
+<th class="sort" data-col="cat" onclick="sortBy('cat')">Category <span class="si">▲▼</span></th>
+<th class="sort active" data-col="cal" onclick="sortBy('cal')">Calories <span class="si">▲▼</span></th>
+<th class="sort" data-col="prot" onclick="sortBy('prot')">Protein <span class="si">▲▼</span></th>
+<th class="sort" data-col="carbs" onclick="sortBy('carbs')">Carbs <span class="si">▲▼</span></th>
+<th class="sort" data-col="fat" onclick="sortBy('fat')">Fat <span class="si">▲▼</span></th>
+<th>Serving</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+<div id="empty" class="srchint" style="display:none">No items match your search.</div>
+</div>
 </main>
 
 <footer>
-  Nutrition data from official brand sources &middot; DesiMacros &mdash; Indian fast food nutrition
+<p><strong>DesiMacros</strong> — Verified nutrition data sourced from official Indian restaurant PDFs and FSSAI-compliant nutrition booklets.</p>
+<p>McDonald's India data from <a href="https://mcdindia.com/wp-content/uploads/2025/01/all-product-nutritional-information_cprl_main-store.pdf" target="_blank" rel="noopener">CPRL Official Nutrition Booklet</a>. RDA reference: 2000 kcal diet. Values are per serving as standardized by the restaurant.</p>
 </footer>
 
 <script>
 const DATA = [
-  // ---- McDonald's India (verified via FatSecret Branded Entries) ----
-  { chain:"McDonald's India", color:"#DA291C", items:[
-    {name:"McAloo Tikki",cat:"Burgers",type:"veg",cal:340,protein:8.5,carbs:50.3,fat:11.3,note:"per burger (143g)"},
-    {name:"McVeggie Burger",cat:"Burgers",type:"veg",cal:388,protein:10.2,carbs:56.5,fat:13.8,note:"per burger (168g)"},
-    {name:"Crispy Veggie Burger",cat:"Burgers",type:"veg",cal:482,protein:9.9,carbs:62.4,fat:19.8,note:"per burger (212g)"},
-    {name:"Chicken McGrill",cat:"Burgers",type:"non-veg",cal:274,protein:13.2,carbs:36.2,fat:8.5,note:"per burger (133g)"},
-    {name:"McSpicy Chicken Burger",cat:"Burgers",type:"non-veg",cal:450,protein:21.5,carbs:46.1,fat:19.4,note:"per burger (201g)"},
-    {name:"Chicken Maharaja Mac",cat:"Burgers",type:"non-veg",cal:689,protein:34.0,carbs:55.4,fat:36.7,note:"per burger (284g)"},
-    {name:"Veg Maharaja Mac",cat:"Burgers",type:"veg",cal:833,protein:24.2,carbs:93.8,fat:37.9,note:"per burger (297g)"},
-    {name:"Veg McMuffin",cat:"Burgers",type:"veg",cal:303,protein:10.2,carbs:38.9,fat:11.8,note:"per burger"},
-    {name:"Veg Supreme McMuffin",cat:"Burgers",type:"veg",cal:348,protein:10.5,carbs:41.0,fat:15.8,note:"per burger"},
-    {name:"Schezwan Veg Burger",cat:"Burgers",type:"veg",cal:286,protein:6.1,carbs:46.3,fat:8.5,note:"per burger"},
-    {name:"Veg Surprise Burger",cat:"Burgers",type:"veg",cal:313,protein:5.7,carbs:39.8,fat:15.0,note:"per burger"},
-    {name:"Grand Chicken Burger",cat:"Burgers",type:"non-veg",cal:507,protein:27.4,carbs:55.7,fat:19.0,note:"per burger (222g)"},
-    {name:"McCrispy Chicken",cat:"Burgers",type:"non-veg",cal:508,protein:22.3,carbs:49.4,fat:27.7,note:"per burger (223g)"},
-    {name:"Chicken Surprise Burger",cat:"Burgers",type:"non-veg",cal:293,protein:10.7,carbs:34.4,fat:12.5,note:"per burger"},
-    {name:"McEgg",cat:"Burgers",type:"non-veg",cal:281,protein:12.0,carbs:32.0,fat:11.0,note:"per burger"},
-    {name:"Pizza McPuff",cat:"Sides",type:"veg",cal:225,protein:5.5,carbs:24.8,fat:11.4,note:"per piece"},
-    {name:"Green Chilli Aloo Naan",cat:"Sides",type:"veg",cal:350,protein:7.8,carbs:45.8,fat:15.1,note:"per piece"},
-    {name:"Green Chilli Kabab Naan",cat:"Sides",type:"non-veg",cal:392,protein:15.0,carbs:41.8,fat:18.3,note:"per piece"},
-    {name:"McSpicy Chicken Wrap",cat:"Wraps",type:"non-veg",cal:567,protein:23.7,carbs:57.1,fat:26.9,note:"per wrap"},
-    {name:"Saucy Wrap - Chicken",cat:"Wraps",type:"non-veg",cal:312,protein:13.6,carbs:30.8,fat:14.9,note:"per wrap"},
-    {name:"Butter Chicken Grilled",cat:"Wraps",type:"non-veg",cal:357,protein:17.1,carbs:39.8,fat:14.4,note:"per wrap"},
-    {name:"Grill Chicken Wrap (Chipotle)",cat:"Wraps",type:"non-veg",cal:638,protein:25.0,carbs:57.0,fat:22.0,note:"per wrap"},
-    {name:"McAloo Wrap (Chipotle)",cat:"Wraps",type:"veg",cal:357,protein:5.0,carbs:39.0,fat:22.0,note:"per wrap"},
-    {name:"Mexican Aloo Wrap",cat:"Wraps",type:"veg",cal:365,protein:6.0,carbs:39.0,fat:20.0,note:"per wrap"},
-    {name:"Egg Wrap (Chipotle)",cat:"Wraps",type:"non-veg",cal:310,protein:10.0,carbs:24.0,fat:22.0,note:"per wrap"},
-    {name:"Cheesy Rice Bowl",cat:"Meals",type:"veg",cal:574,protein:12.3,carbs:70.9,fat:26.8,note:"per bowl"},
-    {name:"Spicy Rice Bowl",cat:"Meals",type:"veg",cal:523,protein:11.7,carbs:79.1,fat:17.8,note:"per bowl"},
-    {name:"Cheesy Rice Bowl + Nuggets",cat:"Meals",type:"non-veg",cal:751,protein:23.5,carbs:82.3,fat:36.4,note:"per bowl"},
-    {name:"Spicy Rice Bowl + Nuggets",cat:"Meals",type:"non-veg",cal:701,protein:23.0,carbs:90.6,fat:27.3,note:"per bowl"},
-    {name:"Coke Float",cat:"Beverages",type:"veg",cal:139,protein:1.5,carbs:29.2,fat:1.8,note:"per serving"},
-    {name:"Fanta Float",cat:"Beverages",type:"veg",cal:152,protein:1.5,carbs:32.4,fat:1.8,note:"per serving"},
-    {name:"Sprite Float",cat:"Beverages",type:"veg",cal:145,protein:1.5,carbs:30.8,fat:1.8,note:"per serving"},
-    {name:"Coke Zero",cat:"Beverages",type:"veg",cal:0,protein:0,carbs:0,fat:0,note:"per serving"},
-    {name:"Iced Tea",cat:"Beverages",type:"veg",cal:194,protein:0.2,carbs:48.3,fat:0,note:"per serving"},
-    {name:"Regular Chocolate Milkshake",cat:"Beverages",type:"veg",cal:175,protein:4,carbs:30,fat:4,note:"regular"},
-    {name:"Medium Chocolate Milkshake",cat:"Beverages",type:"veg",cal:241,protein:6,carbs:42,fat:6,note:"medium"},
-    {name:"Large Chocolate Milkshake",cat:"Beverages",type:"veg",cal:349,protein:8,carbs:60,fat:8,note:"large"},
-    {name:"Soft Serve Regular",cat:"Desserts",type:"veg",cal:86,protein:2.0,carbs:15.2,fat:1.8,note:"regular cone"},
-    {name:"Sundae Chocolate Regular",cat:"Desserts",type:"veg",cal:122,protein:2.3,carbs:19.1,fat:4.0,note:"regular"},
-    {name:"Sundae Chocolate Medium",cat:"Desserts",type:"veg",cal:197,protein:3.5,carbs:30.4,fat:6.9,note:"medium"},
-    {name:"McFlurry Choco Crunch Small",cat:"Desserts",type:"veg",cal:153,protein:3,carbs:23,fat:5,note:"small"},
-    {name:"McFlurry Choco Crunch Regular",cat:"Desserts",type:"veg",cal:336,protein:5,carbs:42,fat:16,note:"regular"},
-    {name:"Hot Cake with Maple Syrup",cat:"Desserts",type:"veg",cal:433,protein:8.6,carbs:68.0,fat:14.0,note:"per serving"},
-    {name:"Cappuccino",cat:"McCafe",type:"veg",cal:159,protein:8,carbs:15,fat:8,note:"12 oz"},
-    {name:"Latte",cat:"McCafe",type:"veg",cal:152,protein:8,carbs:12,fat:8,note:"12 oz"},
-    {name:"Mocha",cat:"McCafe",type:"veg",cal:209,protein:8,carbs:27,fat:8,note:"12 oz"},
-    {name:"Hot Chocolate",cat:"McCafe",type:"veg",cal:289,protein:8,carbs:48,fat:0,note:"12 oz"},
-    {name:"Chai Latte",cat:"McCafe",type:"veg",cal:243,protein:8,carbs:34,fat:8,note:"12 oz"},
-  ]},
-  // ---- Burger King India (FatSecret-verified Whoppers + existing items) ----
-  { chain:"Burger King India", color:"#FF8732", items:[
-    {name:"Crunchy Veg Whopper",cat:"Whoppers",type:"veg",cal:367,protein:16.0,carbs:47.7,fat:13.0,note:"1 whopper (303g)"},
-    {name:"Crunchy Veg Whopper Deluxe",cat:"Whoppers",type:"veg",cal:326,protein:10.1,carbs:55.0,fat:8.3,note:"1 whopper (197g)"},
-    {name:"Korean Kimchi Veg Whopper",cat:"Whoppers",type:"veg",cal:638,protein:16.6,carbs:98.7,fat:19.7,note:"1 whopper (354g)"},
-    {name:"Paneer Whopper Deluxe",cat:"Whoppers",type:"veg",cal:472,protein:16.4,carbs:42.7,fat:26.7,note:"1 whopper (197g)"},
-    {name:"Molten Cheese Lava Whopper",cat:"Whoppers",type:"veg",cal:516,protein:15.3,carbs:46.7,fat:30.0,note:"1 whopper (201g)"},
-    {name:"Korean Kimchi Chicken Whopper",cat:"Whoppers",type:"non-veg",cal:643,protein:23.3,carbs:66.3,fat:31.7,note:"1 whopper (358g)"},
-    {name:"Smokey Crunchy Chicken Whopper",cat:"Whoppers",type:"non-veg",cal:344,protein:14.2,carbs:36.4,fat:16.1,note:"1 whopper (197g)"},
-    {name:"Flame Grilled Mutton Whopper",cat:"Whoppers",type:"non-veg",cal:663,protein:25.6,carbs:52.2,fat:39.1,note:"1 whopper (292g)"},
-    {name:"Crispy Veg",cat:"Burgers",type:"veg",cal:427,protein:8.4,carbs:52.0,fat:20.6,note:"138 g"},
-    {name:"BK Veggie",cat:"Burgers",type:"veg",cal:398,protein:8.6,carbs:52.4,fat:17.2,note:"137 g"},
-    {name:"Veg Chilli Cheese",cat:"Burgers",type:"veg",cal:423,protein:11.6,carbs:50.6,fat:19.3,note:"149 g"},
-    {name:"Paneer King",cat:"Burgers",type:"veg",cal:526,protein:14.0,carbs:67.1,fat:22.4,note:"165 g"},
-    {name:"Veg Supreme",cat:"Burgers",type:"veg",cal:374,protein:11.5,carbs:49.2,fat:16.5,note:"147 g"},
-    {name:"BK Grill",cat:"Burgers",type:"non-veg",cal:332,protein:15.3,carbs:36.7,fat:13.8,note:"118 g"},
-    {name:"Chicken Chilli Cheese",cat:"Burgers",type:"non-veg",cal:406,protein:16.8,carbs:47.9,fat:16.4,note:"155 g"},
-    {name:"Crispy Chicken",cat:"Burgers",type:"non-veg",cal:345,protein:12.4,carbs:39.0,fat:15.5,note:"116 g"},
-    {name:"Xtra Long Chicken",cat:"Burgers",type:"non-veg",cal:534,protein:23.4,carbs:61.1,fat:21.7,note:"211 g"},
-    {name:"Chicken Fries (5 pcs)",cat:"Sides",type:"non-veg",cal:206,protein:10.9,carbs:19.9,fat:9.2,note:"65 g"},
-    {name:"Fiery Rings (4 pcs)",cat:"Sides",type:"veg",cal:275,protein:7.0,carbs:36.0,fat:11.5,note:"80 g"},
-    {name:"Potato Tots",cat:"Sides",type:"veg",cal:179,protein:4.7,carbs:20.0,fat:9.0,note:"70 g"},
-    {name:"Fries Regular",cat:"Sides",type:"veg",cal:264,protein:4.4,carbs:37.7,fat:10.6,note:"74 g"},
-    {name:"King Fries",cat:"Sides",type:"veg",cal:535,protein:9.9,carbs:76.5,fat:8.9,note:"150 g"},
-    {name:"Vanilla Softie",cat:"Desserts",type:"veg",cal:118,protein:1.9,carbs:20.2,fat:3.3,note:"90 g"},
-    {name:"Choco Dip Softie",cat:"Desserts",type:"veg",cal:253,protein:4.7,carbs:30.7,fat:12.8,note:"105 g"},
-    {name:"Chocolate Shake",cat:"Beverages",type:"veg",cal:414,protein:8.0,carbs:64.6,fat:14.0,note:"275 ml"},
-    {name:"Mango Shake",cat:"Beverages",type:"veg",cal:334,protein:5.4,carbs:53.4,fat:11.0,note:"275 ml"},
-    {name:"Strawberry Shake",cat:"Beverages",type:"veg",cal:435,protein:9.6,carbs:73.3,fat:11.5,note:"275 ml"},
-  ]},
-  // ---- KFC India (FatSecret-verified) ----
-  { chain:"KFC India", color:"#E4002B", items:[
-    {name:"Classic Zinger Burger",cat:"Burgers",type:"non-veg",cal:612,protein:27,carbs:63,fat:29,note:"1 pc (225g)"},
-    {name:"Pro Zinger Burger",cat:"Burgers",type:"non-veg",cal:529,protein:29,carbs:41,fat:29,note:"1 pc (225g)"},
-    {name:"Spicy Zinger Burger",cat:"Burgers",type:"non-veg",cal:439,protein:28,carbs:47,fat:16,note:"1 pc (215g)"},
-    {name:"Tandoori Zinger Burger",cat:"Burgers",type:"non-veg",cal:902,protein:25,carbs:62,fat:30,note:"1 pc (230g)"},
-    {name:"Veg Zinger Burger",cat:"Burgers",type:"veg",cal:619,protein:14,carbs:83,fat:25,note:"1 pc (230g)"},
-    {name:"Paneer Zinger Burger",cat:"Burgers",type:"veg",cal:643,protein:24,carbs:56,fat:37,note:"1 pc (215g)"},
-    {name:"Classic Chicken Krisper",cat:"Burgers",type:"non-veg",cal:405,protein:17,carbs:47,fat:17,note:"1 pc (150g)"},
-    {name:"Spicy Chicken Krisper",cat:"Burgers",type:"non-veg",cal:342,protein:17,carbs:49,fat:8,note:"1 pc (145g)"},
-    {name:"Double Down",cat:"Burgers",type:"non-veg",cal:590,protein:38,carbs:34,fat:34,note:"1 pc (225g)"},
-    {name:"1 Pc Zinger Fillet",cat:"Chicken",type:"non-veg",cal:359,protein:18,carbs:34,fat:18,note:"1 fillet (135g)"},
-    {name:"Hot & Crispy Chicken 1 pc",cat:"Chicken",type:"non-veg",cal:320,protein:19,carbs:16,fat:20,note:"1 pc (110g)"},
-    {name:"Hot Wings 2 pc",cat:"Chicken",type:"non-veg",cal:249,protein:11,carbs:16,fat:16,note:"2 pcs (70g)"},
-    {name:"Chicken Popcorn (Regular)",cat:"Chicken",type:"non-veg",cal:306,protein:17,carbs:21,fat:18,note:"(90g)"},
-    {name:"Chicken Popcorn (Medium)",cat:"Chicken",type:"non-veg",cal:476,protein:27,carbs:32,fat:28,note:"(140g)"},
-    {name:"Zinger Pro Meal",cat:"Meals",type:"non-veg",cal:895,protein:34,carbs:102,fat:40,note:"(630g)"},
-    {name:"Tandoori Zinger Box",cat:"Meals",type:"non-veg",cal:1500,protein:42,carbs:140,fat:57,note:"(705g)"},
-    {name:"Double Chicken Roll",cat:"Rolls",type:"non-veg",cal:526,protein:23,carbs:51,fat:27,note:"1 roll (190g)"},
-    {name:"Tandoori Chicken Roll",cat:"Rolls",type:"non-veg",cal:255,protein:18,carbs:41,fat:20,note:"1 roll (150g)"},
-    {name:"Veg Roll",cat:"Rolls",type:"veg",cal:447,protein:8,carbs:55,fat:22,note:"1 roll (145g)"},
-    {name:"Classic HC Chicken Rice Bowl",cat:"Rice Bowls",type:"non-veg",cal:547,protein:36,carbs:61,fat:18,note:"1 bowl (360g)"},
-    {name:"Smoky Chicken Rice Bowl",cat:"Rice Bowls",type:"non-veg",cal:418,protein:24,carbs:65,fat:8,note:"1 bowl (340g)"},
-    {name:"Veg Rice Bowl",cat:"Rice Bowls",type:"veg",cal:418,protein:9,carbs:76,fat:9,note:"1 bowl (305g)"},
-    {name:"Regular Fries",cat:"Sides",type:"veg",cal:224,protein:5,carbs:28,fat:11,note:"1 serving (75g)"},
-    {name:"Choco Lava Cake",cat:"Desserts",type:"veg",cal:343,protein:6,carbs:34,fat:21,note:"(60g)"},
-    {name:"Choco Mud Pie",cat:"Desserts",type:"veg",cal:241,protein:3,carbs:37,fat:9,note:"(93g)"},
-    {name:"Pepsi Regular",cat:"Beverages",type:"veg",cal:142,protein:0,carbs:34,fat:0,note:"330 ml"},
-  ]},
-  // ---- Subway India ----
-  { chain:"Subway India", color:"#009843", items:[
-    {name:'Aloo Patty 6"',cat:"Subs",type:"veg",cal:337,protein:12,carbs:58,fat:7,note:'6-inch; multigrain bread'},
-    {name:'Chatpata Chana 6"',cat:"Subs",type:"veg",cal:320,protein:12,carbs:57,fat:5,note:'6-inch; multigrain bread'},
-    {name:'Chicken Kofta 6"',cat:"Subs",type:"non-veg",cal:379,protein:17,carbs:54,fat:11,note:'6-inch; multigrain bread'},
-    {name:'Chicken Slice 6"',cat:"Subs",type:"non-veg",cal:290,protein:18,carbs:47,fat:4,note:'6-inch; multigrain bread'},
-    {name:'Chicken Teriyaki 6"',cat:"Subs",type:"non-veg",cal:311,protein:21,carbs:51,fat:3,note:'6-inch; multigrain bread'},
-    {name:'Corn & Peas 6"',cat:"Subs",type:"veg",cal:359,protein:11,carbs:53,fat:12,note:'6-inch; multigrain bread'},
-    {name:'Hara Bhara Kebab 6"',cat:"Subs",type:"veg",cal:391,protein:14,carbs:62,fat:11,note:'6-inch; multigrain bread'},
-    {name:'Mexican Patty 6"',cat:"Subs",type:"veg",cal:379,protein:15,carbs:70,fat:10,note:'6-inch; multigrain bread'},
-    {name:'Paneer Tikka 6"',cat:"Subs",type:"veg",cal:410,protein:16,carbs:50,fat:16,note:'6-inch; multigrain bread'},
-    {name:'Peri Peri Chicken 6"',cat:"Subs",type:"non-veg",cal:312,protein:24,carbs:48,fat:3,note:'6-inch; multigrain bread'},
-    {name:'Roasted Chicken Strips 6"',cat:"Subs",type:"non-veg",cal:301,protein:21,carbs:48,fat:3,note:'6-inch; multigrain bread'},
-    {name:'Tandoori Chicken Tikka 6"',cat:"Subs",type:"non-veg",cal:341,protein:20,carbs:48,fat:8,note:'6-inch; multigrain bread'},
-    {name:'Tandoori Tofu 6"',cat:"Subs",type:"veg",cal:356,protein:15,carbs:53,fat:9,note:'6-inch; multigrain bread'},
-    {name:'Tuna 6"',cat:"Subs",type:"non-veg",cal:384,protein:18,carbs:48,fat:14,note:'6-inch; multigrain bread'},
-    {name:'Veg Seekh 6"',cat:"Subs",type:"veg",cal:365,protein:15,carbs:60,fat:7,note:'6-inch; multigrain bread'},
-    {name:'Veg Shammi Kebab 6"',cat:"Subs",type:"veg",cal:365,protein:15,carbs:63,fat:6,note:'6-inch; multigrain bread'},
-  ]},
-  // ---- Pizza Hut India (FatSecret-verified) ----
-  { chain:"Pizza Hut India", color:"#EE3124", items:[
-    {name:"Margherita Pizza Medium",cat:"Pizza",type:"veg",cal:1377,protein:60.7,carbs:193.0,fat:40.3,note:"whole medium; 6 slices"},
-    {name:"Schezwan Margherita Medium",cat:"Pizza",type:"veg",cal:1412,protein:60.3,carbs:197.5,fat:42.4,note:"whole medium; 6 slices"},
-    {name:"Corn n Cheese Medium",cat:"Pizza",type:"veg",cal:1677,protein:69.4,carbs:254.5,fat:42.4,note:"whole medium; 6 slices"},
-    {name:"Veggie Feast Medium",cat:"Pizza",type:"veg",cal:1605,protein:69.8,carbs:238.3,fat:41.4,note:"whole medium; 6 slices"},
-    {name:"Spiced Paneer Medium",cat:"Pizza",type:"veg",cal:1595,protein:84.8,carbs:185.9,fat:56.9,note:"whole medium; 6 slices"},
-    {name:"Veggie Supreme Medium",cat:"Pizza",type:"veg",cal:1653,protein:68.8,carbs:214.7,fat:55.9,note:"whole medium; 6 slices"},
-    {name:"Chicken Sausage Medium",cat:"Pizza",type:"non-veg",cal:1700,protein:69.0,carbs:187.7,fat:74.7,note:"whole medium; 6 slices"},
-    {name:"Chicken Tikka Medium",cat:"Pizza",type:"non-veg",cal:1767,protein:78.6,carbs:216.8,fat:65.0,note:"whole medium; 6 slices"},
-    {name:"Chicken Supreme Medium",cat:"Pizza",type:"non-veg",cal:1754,protein:94.1,carbs:186.6,fat:70.1,note:"whole medium; 6 slices"},
-    {name:"Indi Garlic Bread Combo",cat:"Garlic Bread",type:"veg",cal:737,protein:14.0,carbs:77.9,fat:41.0,note:"1 serving (194g)"},
-    {name:"Indi Cheesy Pocket (2 Pcs)",cat:"Garlic Bread",type:"veg",cal:816,protein:26.8,carbs:106.1,fat:33.6,note:"(296g)"},
-    {name:"Classic Bread Stix",cat:"Garlic Bread",type:"veg",cal:517,protein:15.6,carbs:111.2,fat:2.2,note:"180 g"},
-    {name:"Loaded Bread Stix",cat:"Garlic Bread",type:"veg",cal:673,protein:16.4,carbs:113.2,fat:18.3,note:"210 g"},
-    {name:"Garlic Bread Cheese",cat:"Garlic Bread",type:"veg",cal:494,protein:10.4,carbs:54.8,fat:31.7,note:"136 g"},
-    {name:"Spicy Baked Chicken Wings 4 pc",cat:"Chicken Wings",type:"non-veg",cal:280,protein:28.2,carbs:13.5,fat:17.4,note:"148 g"},
-    {name:"BBQ Wings 4 pc",cat:"Chicken Wings",type:"non-veg",cal:367,protein:34.5,carbs:18.4,fat:17.4,note:"178 g"},
-    {name:"Choco Volcano",cat:"Desserts",type:"veg",cal:262,protein:5.7,carbs:45.7,fat:12.8,note:"1 piece (82g)"},
-  ]},
-  // ---- Domino's India (FatSecret-verified) ----
-  { chain:"Domino's India", color:"#0078AE", items:[
-    {name:"Margherita Pizza (per slice)",cat:"Pizza",type:"veg",cal:139,protein:6.8,carbs:20.5,fat:3.2,note:"per slice (52g)"},
-    {name:"Peppy Paneer Pizza (per slice)",cat:"Pizza",type:"veg",cal:169,protein:7.2,carbs:24.8,fat:4.5,note:"per slice (68g)"},
-    {name:"Farmhouse Pizza (per slice)",cat:"Pizza",type:"veg",cal:155,protein:6.5,carbs:22.0,fat:5.0,note:"per slice (est.)"},
-    {name:"Cheese n Corn Pizza (per slice)",cat:"Pizza",type:"veg",cal:165,protein:7.0,carbs:24.0,fat:5.5,note:"per slice (est.)"},
-    {name:"Mexican Green Wave (per slice)",cat:"Pizza",type:"veg",cal:160,protein:6.0,carbs:23.0,fat:5.2,note:"per slice (est.)"},
-    {name:"Veggie Paradise (per slice)",cat:"Pizza",type:"veg",cal:150,protein:6.0,carbs:21.0,fat:4.8,note:"per slice (est.)"},
-    {name:"Thin Crust Chicken Pizza",cat:"Pizza",type:"non-veg",cal:225,protein:11.0,carbs:20.0,fat:10.5,note:"per slice"},
-    {name:"Taco Mexicana Veg",cat:"Specialty",type:"veg",cal:327,protein:6.8,carbs:40.3,fat:15.4,note:"1 serving (91g)"},
-    {name:"Taco Mexicana Chicken",cat:"Specialty",type:"non-veg",cal:322,protein:9.3,carbs:34.2,fat:16.5,note:"1 serving (97g)"},
-    {name:"Zingy Parcel Veg",cat:"Sides",type:"veg",cal:620,protein:16.9,carbs:69.5,fat:30.5,note:"(180g)"},
-    {name:"Garlic Bread",cat:"Sides",type:"veg",cal:340,protein:11.9,carbs:57.6,fat:6.9,note:"(122g)"},
-    {name:"Stuffed Garlic Bread",cat:"Sides",type:"veg",cal:540,protein:20.2,carbs:82.4,fat:14.4,note:"whole (190g)"},
-    {name:"Paneer Tikka Stuffed Garlic Bread",cat:"Sides",type:"veg",cal:429,protein:10.0,carbs:44.0,fat:23.0,note:"(200g)"},
-    {name:"Choco Lava Cake",cat:"Desserts",type:"veg",cal:350,protein:4.0,carbs:46.0,fat:19.0,note:"1 serving"},
-    {name:"7 Up",cat:"Beverages",type:"veg",cal:140,protein:0,carbs:35,fat:0,note:"330 ml"},
-  ]},
-  // ---- Taco Bell India (official source) ----
-  { chain:"Taco Bell India", color:"#702082", items:[
-    {name:"Crunchy Taco Veg (Mex Paneer)",cat:"Tacos",type:"veg",cal:143,protein:9.8,carbs:14.9,fat:6.4,note:"Spicy Ranch"},
-    {name:"Crunchy Taco Veg (Pinto Bean)",cat:"Tacos",type:"veg",cal:116,protein:4.1,carbs:15.4,fat:5.8,note:"Spicy Ranch"},
-    {name:"Soft Taco Veg (Mex Paneer)",cat:"Tacos",type:"veg",cal:233,protein:10.9,carbs:17.0,fat:13.6,note:"Lava sauce"},
-    {name:"Crunchy Taco (Grilled Chicken)",cat:"Tacos",type:"non-veg",cal:144,protein:8.8,carbs:15.7,fat:6.6,note:"Spicy Ranch"},
-    {name:"Soft Taco (Grilled Chicken)",cat:"Tacos",type:"non-veg",cal:186,protein:9.3,carbs:18.4,fat:8.4,note:"Lava sauce"},
-    {name:"Cheesy Double Decker Taco Veg",cat:"Tacos",type:"veg",cal:353,protein:8.1,carbs:40.5,fat:18.0,note:"1 taco"},
-    {name:"Cheesy Double Decker Taco Non-Veg",cat:"Tacos",type:"non-veg",cal:386,protein:14.6,carbs:39.3,fat:19.1,note:"1 taco"},
-    {name:"Classic Burrito Veg",cat:"Burritos",type:"veg",cal:209,protein:6.1,carbs:24.3,fat:9.7,note:"Spicy Ranch"},
-    {name:"Classic Burrito Non-Veg",cat:"Burritos",type:"non-veg",cal:201,protein:7.8,carbs:26.4,fat:7.7,note:"Spicy Ranch"},
-    {name:"7 Layer Burrito Veg",cat:"Burritos",type:"veg",cal:186,protein:3.8,carbs:13.1,fat:7.2,note:"1 burrito"},
-    {name:"Tikka Masala Burrito Veg",cat:"Burritos",type:"veg",cal:217,protein:5.6,carbs:29.9,fat:8.2,note:"1 burrito"},
-    {name:"Grilled Cheese Burrito Veg",cat:"Burritos",type:"veg",cal:228,protein:8.5,carbs:24.7,fat:10.5,note:"1 burrito"},
-    {name:"Quesadilla Veg",cat:"Quesadillas",type:"veg",cal:243,protein:11.3,carbs:22.3,fat:12.1,note:"Creamy Jalapeño"},
-    {name:"Quesadilla Non-Veg",cat:"Quesadillas",type:"non-veg",cal:269,protein:15.1,carbs:22.0,fat:13.4,note:"Creamy Jalapeño"},
-    {name:"Grilled Cheese Quesadilla Veg",cat:"Quesadillas",type:"veg",cal:242,protein:9.2,carbs:23.3,fat:12.6,note:"1 quesadilla"},
-    {name:"Cheesy Nachos",cat:"Nachos & Sides",type:"veg",cal:228,protein:3.7,carbs:31.6,fat:9.8,note:"1 serving"},
-    {name:"Mexican Fries",cat:"Nachos & Sides",type:"veg",cal:174,protein:3.8,carbs:21.1,fat:8.3,note:"1 serving"},
-    {name:"Loaded Fries",cat:"Nachos & Sides",type:"veg",cal:186,protein:3.3,carbs:16.6,fat:12.1,note:"1 serving"},
-    {name:"Mexican Corn Salad",cat:"Nachos & Sides",type:"veg",cal:87,protein:2.4,carbs:13.6,fat:3.4,note:"1 serving"},
-    {name:"Crispy Chicken Strips",cat:"Nachos & Sides",type:"non-veg",cal:204,protein:10.1,carbs:15.0,fat:11.7,note:"1 serving"},
-    {name:"Bell Rice Bowl Veg",cat:"Rice Bowls",type:"veg",cal:141,protein:4.1,carbs:20.7,fat:4.5,note:"1 bowl"},
-    {name:"Bell Rice Bowl Non-Veg",cat:"Rice Bowls",type:"non-veg",cal:134,protein:4.9,carbs:20.3,fat:3.7,note:"1 bowl"},
-    {name:"Vegstar Wrap",cat:"Wraps",type:"veg",cal:240,protein:10.9,carbs:18.7,fat:13.6,note:"1 wrap"},
-    {name:"Chickstar Wrap",cat:"Wraps",type:"non-veg",cal:220,protein:7.3,carbs:26.1,fat:9.7,note:"1 wrap"},
-    {name:"Chocodilla",cat:"Desserts",type:"veg",cal:425,protein:5.0,carbs:60.2,fat:18.3,note:"1 serving"},
-    {name:"Cinnamon Twist",cat:"Desserts",type:"veg",cal:481,protein:3.2,carbs:75.6,fat:18.5,note:"1 serving"},
-    {name:"Choco Caramel Tostadas",cat:"Desserts",type:"veg",cal:259,protein:4.1,carbs:39.0,fat:16.4,note:"1 serving"},
-    {name:"Chalupa Veg",cat:"Specialties",type:"veg",cal:304,protein:9.7,carbs:21.7,fat:19.8,note:"Creamy Jalapeño"},
-    {name:"Cheesy Gordita Veg",cat:"Specialties",type:"veg",cal:279,protein:10.0,carbs:27.5,fat:15.2,note:"1 serving"},
-  ]},
-  // ---- Starbucks India (FatSecret-branded entries) ----
-  { chain:"Starbucks India", color:"#036635", items:[
-    {name:"Caffè Latte (Tall)",cat:"Beverages",type:"veg",cal:150,protein:10,carbs:14,fat:6,note:"Tall 12 oz"},
-    {name:"Caffè Latte (Grande)",cat:"Beverages",type:"veg",cal:200,protein:13,carbs:19,fat:8,note:"Grande 16 oz"},
-    {name:"Cappuccino (Grande)",cat:"Beverages",type:"veg",cal:120,protein:8,carbs:12,fat:4,note:"Grande 16 oz"},
-    {name:"Caffè Mocha (Grande)",cat:"Beverages",type:"veg",cal:330,protein:13,carbs:38,fat:16,note:"Grande; w/ whipped cream"},
-    {name:"Caffè Americano (Grande)",cat:"Beverages",type:"veg",cal:15,protein:1,carbs:3,fat:0,note:"Grande 16 oz"},
-    {name:"Smoked Butterscotch Latte (Tall)",cat:"Beverages",type:"veg",cal:270,protein:9,carbs:35,fat:11,note:"Tall 12 oz"},
-    {name:"Coffee Frappuccino (Grande)",cat:"Frappuccino",type:"veg",cal:240,protein:3,carbs:50,fat:3,note:"Grande 16 oz"},
-    {name:"Java Chip Frappuccino (Grande)",cat:"Frappuccino",type:"veg",cal:440,protein:6,carbs:64,fat:19,note:"Grande 16 oz"},
-    {name:"Mocha Frappuccino (Grande)",cat:"Frappuccino",type:"veg",cal:370,protein:5,carbs:61,fat:15,note:"Grande 16 oz"},
-    {name:"Vanilla Frappuccino (Grande)",cat:"Frappuccino",type:"veg",cal:340,protein:4,carbs:58,fat:10,note:"Grande 16 oz"},
-    {name:"Hot Chocolate (Grande)",cat:"Beverages",type:"veg",cal:330,protein:13,carbs:38,fat:16,note:"Grande; w/ whipped cream"},
-    {name:"Chai Tea Latte (Grande)",cat:"Beverages",type:"veg",cal:240,protein:8,carbs:42,fat:4,note:"Grande 16 oz"},
-    {name:"Pumpkin Spice Latte (Venti)",cat:"Beverages",type:"veg",cal:470,protein:18,carbs:66,fat:16,note:"Venti 20 oz"},
-    {name:"Iced Caffè Latte (Grande)",cat:"Beverages",type:"veg",cal:130,protein:8,carbs:13,fat:5,note:"Grande 16 oz"},
-    {name:"Chilli Chicken English Muffin",cat:"Food",type:"non-veg",cal:529,protein:25.8,carbs:44.5,fat:34,note:"1 serving (160g)"},
-    {name:"Chicken Salad Sandwich",cat:"Food",type:"non-veg",cal:574,protein:30,carbs:80,fat:15,note:"1 serving (175g)"},
-  ]},
-  // ---- Wow! Momo (FatSecret-verified Veg Momo) ----
-  { chain:"Wow! Momo", color:"#E84393", items:[
-    {name:"Veg Momo (Steam)",cat:"Momos",type:"veg",cal:132,protein:4.4,carbs:19.0,fat:4.3,note:"per 100g; Steamed"},
-    {name:"Veg Himalayan Momo (Steam)",cat:"Momos",type:"veg",cal:175,protein:7.7,carbs:22.5,fat:6.0,note:"per 100g; Steamed"},
-    {name:"Veg Hot Garlic Momo (Steam)",cat:"Momos",type:"veg",cal:193,protein:6.1,carbs:27.8,fat:6.4,note:"per 100g; Steamed"},
-    {name:"Veg Darjeeling Momo (Steam)",cat:"Momos",type:"veg",cal:188,protein:6.3,carbs:14.8,fat:11.5,note:"per 100g; Steamed"},
-    {name:"Paneer Momo (Steam)",cat:"Momos",type:"veg",cal:249,protein:9.2,carbs:29.3,fat:12.3,note:"per 100g; Steamed"},
-    {name:"Corn Cheese Momo (Steam)",cat:"Momos",type:"veg",cal:206,protein:7.9,carbs:23.8,fat:8.8,note:"per 100g; Steamed"},
-    {name:"Chicken Himalayan Momo (Steam)",cat:"Momos",type:"non-veg",cal:214,protein:12.0,carbs:23.8,fat:7.9,note:"per 100g; Steamed"},
-    {name:"Chicken Delight Momo (Steam)",cat:"Momos",type:"non-veg",cal:197,protein:11.8,carbs:19.3,fat:8.0,note:"per 100g; Steamed"},
-    {name:"Chicken Darjeeling Momo (Steam)",cat:"Momos",type:"non-veg",cal:261,protein:13.8,carbs:41.1,fat:4.6,note:"per 100g; Steamed"},
-    {name:"Chicken Cheese Momo (Steam)",cat:"Momos",type:"non-veg",cal:232,protein:9.3,carbs:24.0,fat:11.0,note:"per 100g; Steamed"},
-    {name:"Veg Himalayan Momo (Fried)",cat:"Momos",type:"veg",cal:180,protein:7.7,carbs:22.5,fat:6.3,note:"per 100g; Fried"},
-    {name:"Chicken Himalayan Momo (Fried)",cat:"Momos",type:"non-veg",cal:216,protein:12.0,carbs:23.8,fat:8.1,note:"per 100g; Fried"},
-    {name:"Veg Sizzler Momo",cat:"Momos",type:"veg",cal:299,protein:6.9,carbs:36.5,fat:13.9,note:"per 100g"},
-    {name:"Paneer Sizzler Momo",cat:"Momos",type:"veg",cal:372,protein:7.6,carbs:38.5,fat:16.9,note:"per 100g"},
-    {name:"Chicken Sizzler Momo",cat:"Momos",type:"non-veg",cal:411,protein:14.9,carbs:51.9,fat:16.0,note:"per 100g"},
-    {name:"Paneer Tandoori Momo",cat:"Momos",type:"veg",cal:257,protein:11.4,carbs:21.5,fat:14.0,note:"per 100g"},
-    {name:"Chicken Tandoori Momo",cat:"Momos",type:"non-veg",cal:237,protein:12.2,carbs:21.8,fat:11.2,note:"per 100g"},
-    {name:"Veg Thukpa",cat:"WOK",type:"veg",cal:47,protein:1.5,carbs:6.1,fat:1.9,note:"per 100g"},
-    {name:"Chicken Thukpa",cat:"WOK",type:"non-veg",cal:228,protein:9.8,carbs:16.5,fat:13.6,note:"per 100g"},
-    {name:"Veg Fried Rice (WOK)",cat:"WOK",type:"veg",cal:124,protein:3.9,carbs:22.9,fat:1.9,note:"per 100g"},
-    {name:"Chicken Fried Rice (WOK)",cat:"WOK",type:"non-veg",cal:123,protein:7.6,carbs:19.8,fat:1.9,note:"per 100g"},
-    {name:"Chicken Hakka Noodles (WOK)",cat:"WOK",type:"non-veg",cal:201,protein:8.0,carbs:25.4,fat:7.4,note:"per 100g"},
-    {name:"Chilly Chicken (WOK)",cat:"WOK",type:"non-veg",cal:102,protein:9.0,carbs:6.3,fat:4.6,note:"per 100g"},
-    {name:"Chicken Manchurian (WOK)",cat:"WOK",type:"non-veg",cal:111,protein:8.3,carbs:8.4,fat:4.7,note:"per 100g"},
-    {name:"Chilly Paneer (WOK)",cat:"WOK",type:"veg",cal:264,protein:11.7,carbs:20.7,fat:16.0,note:"per 100g"},
-    {name:"Veg Moburg",cat:"Burgers",type:"veg",cal:241,protein:7.5,carbs:33.0,fat:8.7,note:"per 100g"},
-    {name:"Chicken Moburg",cat:"Burgers",type:"non-veg",cal:370,protein:12.2,carbs:28.3,fat:23.1,note:"per 100g"},
-    {name:"Chocolate Momo Platter (4 Pcs)",cat:"Desserts",type:"veg",cal:211,protein:3.0,carbs:36.4,fat:3.8,note:"per 100g"},
-  ]},
-  // ---- Faasos (official menu data) ----
-  { chain:"Faasos", color:"#E17055", items:[
-    {name:"Masala Paneer Tikka Wrap",cat:"Wraps",type:"veg",cal:572,protein:8.9,carbs:54.2,fat:35.6,note:"1 wrap"},
-    {name:"Masala Chicken Tikka Wrap",cat:"Wraps",type:"non-veg",cal:770,protein:21.8,carbs:61.3,fat:49.0,note:"1 wrap"},
-    {name:"Cheesy Corn Salsa Wrap",cat:"Wraps",type:"veg",cal:693,protein:12.9,carbs:75.7,fat:37.6,note:"1 wrap"},
-    {name:"Cheese Melt Chicken Wrap",cat:"Wraps",type:"non-veg",cal:650,protein:22.8,carbs:57.4,fat:36.8,note:"1 wrap"},
-    {name:"Cheese Melt Paneer Wrap",cat:"Wraps",type:"veg",cal:561,protein:10.5,carbs:51.2,fat:35.1,note:"1 wrap"},
-    {name:"Reshmi Chicken Kebab Wrap",cat:"Wraps",type:"non-veg",cal:751,protein:21.2,carbs:60.4,fat:47.3,note:"1 wrap"},
-    {name:"Egg Cheese Sausage Wrap",cat:"Wraps",type:"non-veg",cal:815,protein:26.3,carbs:52.8,fat:55.7,note:"1 wrap"},
-    {name:"Veg Falafel Wrap",cat:"Wraps",type:"veg",cal:945,protein:17.4,carbs:82.3,fat:61.2,note:"1 wrap"},
-    {name:"Chicken Bhuna Wrap",cat:"Wraps",type:"non-veg",cal:776,protein:16.5,carbs:59.9,fat:52.5,note:"1 wrap"},
-    {name:"American Smoked Sausage Wrap",cat:"Wraps",type:"non-veg",cal:842,protein:28.0,carbs:60.0,fat:55.0,note:"1 wrap"},
-    {name:"Baked Pizza Wrap (Veg)",cat:"Wraps",type:"veg",cal:614,protein:21.0,carbs:65.0,fat:28.0,note:"1 wrap"},
-    {name:"Baked Pizza Wrap (Chicken)",cat:"Wraps",type:"non-veg",cal:779,protein:33.0,carbs:72.0,fat:38.0,note:"1 wrap"},
-    {name:"Smoked Butter Chicken Wrap",cat:"Wraps",type:"non-veg",cal:701,protein:23.0,carbs:65.0,fat:39.0,note:"1 wrap"},
-    {name:"Bhuna Chicken Overloaded Wrap",cat:"Wraps",type:"non-veg",cal:1052,protein:36.0,carbs:64.0,fat:73.0,note:"1 wrap"},
-    {name:"Chicken Rice Bowl (Jumbo)",cat:"Rice Bowls",type:"non-veg",cal:578,protein:22.0,carbs:89.0,fat:16.0,note:"1 bowl"},
-    {name:"Veg Rice Bowl (Jumbo)",cat:"Rice Bowls",type:"veg",cal:578,protein:13.0,carbs:97.0,fat:16.0,note:"1 bowl"},
-    {name:"Chicken Signature Rice Bowl",cat:"Rice Bowls",type:"non-veg",cal:630,protein:18.0,carbs:91.0,fat:26.0,note:"1 bowl"},
-    {name:"Paneer Signature Rice Bowl",cat:"Rice Bowls",type:"veg",cal:668,protein:16.0,carbs:93.0,fat:30.0,note:"1 bowl"},
-    {name:"Smoked Butter Chicken Rice Bowl",cat:"Rice Bowls",type:"non-veg",cal:659,protein:22.0,carbs:115.0,fat:13.0,note:"1 bowl"},
-    {name:"Egg Rice Bowl",cat:"Rice Bowls",type:"non-veg",cal:581,protein:16.0,carbs:86.0,fat:21.0,note:"1 bowl"},
-    {name:"Chicken Meatballs",cat:"Sides",type:"non-veg",cal:272,protein:16.7,carbs:10.9,fat:18.1,note:"4-5 pcs"},
-    {name:"Potato Wedges (Medium)",cat:"Sides",type:"veg",cal:128,protein:4.0,carbs:18.5,fat:4.0,note:"medium"},
-  ]},
-  // ---- California Burrito India (official data) ----
-  { chain:"California Burrito India", color:"#00B894", items:[
-    {name:"Crispy Peri Peri Chicken Rice Bowl Mini",cat:"Rice Bowls",type:"non-veg",cal:600,protein:35,carbs:83,fat:23,note:"(300g)"},
-    {name:"Crispy Peri Peri Chicken Salad",cat:"Salads",type:"non-veg",cal:489,protein:34,carbs:56,fat:23,note:"1 serving"},
-    {name:"Mexican Paneer Rice Bowl",cat:"Rice Bowls",type:"veg",cal:792,protein:36,carbs:98,fat:31,note:"1 serving"},
-    {name:"BBQ Paneer Rice Bowl",cat:"Rice Bowls",type:"veg",cal:792,protein:36,carbs:99,fat:31,note:"1 serving"},
-    {name:"Crispy Mushroom Rice Bowl Mini",cat:"Rice Bowls",type:"veg",cal:600,protein:28,carbs:80,fat:26,note:"1 serving"},
-    {name:"BBQ Chicken Rice Bowl Mini",cat:"Rice Bowls",type:"non-veg",cal:570,protein:36,carbs:77,fat:15,note:"1 serving"},
-    {name:"Mexican Paneer Salad",cat:"Salads",type:"veg",cal:533,protein:29,carbs:50,fat:27,note:"1 serving"},
-    {name:"BBQ Chicken Salad",cat:"Salads",type:"non-veg",cal:459,protein:35,carbs:50,fat:15,note:"1 serving"},
-    {name:"Crispy Mushroom Salad Bowl",cat:"Salads",type:"veg",cal:482,protein:18,carbs:59,fat:22,note:"1 serving"},
-    {name:"Pro Bowl - BBQ Chicken",cat:"Rice Bowls",type:"non-veg",cal:488,protein:29,carbs:50,fat:20,note:"(300g)"},
-    {name:"Chili Chipotle Chicken Rice Bowl",cat:"Rice Bowls",type:"non-veg",cal:725,protein:42,carbs:98,fat:20,note:"1 serving"},
-    {name:"Chocodilla",cat:"Desserts",type:"veg",cal:220,protein:3.8,carbs:26,fat:9,note:"1 serving"},
-  ]},
-  // ---- Haldiram's (packaged foods nutrition data) ----
-  { chain:"Haldiram's", color:"#D63031", items:[
-    {name:"Phulka Roti",cat:"Food",type:"veg",cal:80,protein:2.5,carbs:14.2,fat:1.7,note:"1 roti (30g)"},
-    {name:"Boondi Ka Laddoo",cat:"Sweets",type:"veg",cal:210,protein:4,carbs:35.1,fat:8.5,note:"1 ladoo (50g)"},
-    {name:"Dal Kachori",cat:"Snacks",type:"veg",cal:170,protein:3,carbs:16,fat:11,note:"1 piece (40g)"},
-    {name:"Raj Kachori",cat:"Snacks",type:"veg",cal:190,protein:6,carbs:25,fat:7,note:"1 piece"},
-    {name:"Soan Papdi",cat:"Sweets",type:"veg",cal:110,protein:2,carbs:14,fat:5,note:"1 piece (21g)"},
-    {name:"Bhel Puri",cat:"Snacks",type:"veg",cal:477,protein:11.6,carbs:64.7,fat:19.1,note:"per 100g"},
-    {name:"Aloo Bhujia",cat:"Snacks",type:"veg",cal:63,protein:0.5,carbs:4,fat:5,note:"1 serving (10g)"},
-    {name:"Moong Dal",cat:"Snacks",type:"veg",cal:46,protein:1.8,carbs:4.2,fat:2.4,note:"2 tsp (10g)"},
-    {name:"Bhujia Sev",cat:"Snacks",type:"veg",cal:602,protein:13.0,carbs:37.4,fat:44.6,note:"per 100g"},
-    {name:"Salted Peanuts",cat:"Snacks",type:"veg",cal:637,protein:20.6,carbs:21.9,fat:51.9,note:"per 100g"},
-    {name:"Khatta Meetha",cat:"Snacks",type:"veg",cal:530,protein:9.3,carbs:57.4,fat:29.3,note:"per 100g"},
-    {name:"Namkeen Mix",cat:"Snacks",type:"veg",cal:510,protein:20,carbs:40,fat:30,note:"per 100g"},
-    {name:"Taka Tak",cat:"Snacks",type:"veg",cal:543,protein:7,carbs:50,fat:35,note:"per 100g"},
-    {name:"Bhakarwadi",cat:"Snacks",type:"veg",cal:125,protein:0.5,carbs:16.7,fat:6.3,note:"1/4 packet (25g)"},
-    {name:"Lite Chiwda",cat:"Snacks",type:"veg",cal:542,protein:8,carbs:56.3,fat:31.6,note:"per 100g"},
-  ]},
+// ===== MCDONALD'S INDIA =====
+// Source: CPRL Official Nutrition Booklet (mcdindia.com)
+// Breakfast
+{id:'mc','chain':'McDonald\'s','cat':'Breakfast','item':'Veg McMuffin','veg':true,'cal':303,'prot':10.2,'carbs':38.9,'fat':11.8,'sv':'119 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Breakfast','item':'Veg Supreme McMuffin','veg':true,'cal':348,'prot':10.5,'carbs':41.0,'fat':15.8,'sv':'140 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Breakfast','item':'Hot Cake w/ Maple Syrup','veg':true,'cal':433,'prot':8.6,'carbs':68.0,'fat':14.0,'sv':'142 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Breakfast','item':'Hash Brown','veg':true,'cal':137,'prot':1.9,'carbs':15.6,'fat':7.3,'sv':'64 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Breakfast','item':'Egg McMuffin','veg':false,'cal':283,'prot':14.1,'carbs':28.1,'fat':12.3,'sv':'112 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Breakfast','item':'Sausage N Egg McMuffin','veg':false,'cal':350,'prot':22.5,'carbs':28.9,'fat':15.9,'sv':'157 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Breakfast','item':'Sausage McMuffin','veg':false,'cal':281,'prot':16.3,'carbs':28.6,'fat':10.8,'sv':'112 g'},
+// Veg Burgers & Wraps
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'McVeggie Burger','veg':true,'cal':388,'prot':10.2,'carbs':56.5,'fat':13.8,'sv':'168 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Veg Surprise Burger','veg':true,'cal':313,'prot':5.7,'carbs':39.8,'fat':15.0,'sv':'132 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Aloo Tikki Burger','veg':true,'cal':340,'prot':8.5,'carbs':50.3,'fat':11.3,'sv':'146 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'McSpicy Paneer Burger','veg':true,'cal':647,'prot':20.3,'carbs':52.3,'fat':39.5,'sv':'199 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Spicy Paneer Wrap','veg':true,'cal':675,'prot':21.0,'carbs':59.3,'fat':39.1,'sv':'250 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Schezwan Veg Burger','veg':true,'cal':286,'prot':6.1,'carbs':46.3,'fat':8.5,'sv':'121 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Butter Paneer Grilled Burger','veg':true,'cal':382,'prot':12.9,'carbs':44.1,'fat':17.2,'sv':'142 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Veg Maharaja Mac','veg':true,'cal':482,'prot':9.9,'carbs':62.4,'fat':19.8,'sv':'212 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Pizza Puff','veg':true,'cal':225,'prot':5.5,'carbs':24.8,'fat':11.4,'sv':'87 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Crispy Veggie Burger','veg':true,'cal':482,'prot':9.9,'carbs':62.4,'fat':19.8,'sv':'212 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Veg Burger','item':'Grand Cheese Burger','veg':true,'cal':865,'prot':22.7,'carbs':92.2,'fat':43.8,'sv':'303 g'},
+// Chicken Burgers & Wraps
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'Chicken McGrill Burger','veg':false,'cal':274,'prot':13.2,'carbs':36.2,'fat':8.5,'sv':'142 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'McCrispy Chicken Burger','veg':false,'cal':508,'prot':22.3,'carbs':49.4,'fat':27.7,'sv':'227 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'Grand Chicken Burger','veg':false,'cal':507,'prot':27.4,'carbs':55.7,'fat':19.0,'sv':'238 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'Butter Chicken Grilled Burger','veg':false,'cal':357,'prot':17.1,'carbs':39.8,'fat':14.4,'sv':'153 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'McEgg Burger','veg':false,'cal':263,'prot':12.0,'carbs':31.0,'fat':10.0,'sv':'115 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'Chicken Surprise Burger','veg':false,'cal':293,'prot':10.7,'carbs':34.4,'fat':12.5,'sv':'128 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'McChicken Burger','veg':false,'cal':397,'prot':15.7,'carbs':48.0,'fat':15.7,'sv':'173 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'Filet-O-Fish Burger','veg':false,'cal':345,'prot':15.4,'carbs':38.9,'fat':14.2,'sv':'136 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'McSpicy Chicken Burger','veg':false,'cal':450,'prot':21.5,'carbs':46.1,'fat':19.4,'sv':'186 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'McSpicy Chicken Wrap','veg':false,'cal':567,'prot':23.7,'carbs':57.1,'fat':26.9,'sv':'257 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Burger','item':'Chicken Maharaja Mac','veg':false,'cal':689,'prot':34.0,'carbs':55.4,'fat':36.7,'sv':'296 g'},
+// Chicken Sides
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Sides','item':'Chicken McNuggets (4 Pc)','veg':false,'cal':169,'prot':10.0,'carbs':10.5,'fat':9.5,'sv':'64 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Sides','item':'Chicken McNuggets (6 Pc)','veg':false,'cal':253,'prot':15.0,'carbs':15.7,'fat':14.3,'sv':'96 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Sides','item':'Chicken McNuggets (9 Pc)','veg':false,'cal':378,'prot':22.6,'carbs':23.6,'fat':21.5,'sv':'144 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Sides','item':'Chicken McNuggets (20 Pc)','veg':false,'cal':812,'prot':47.6,'carbs':49.9,'fat':46.9,'sv':'320 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Sides','item':'Chicken Wings (2 Pc)','veg':false,'cal':284,'prot':14.5,'carbs':17.6,'fat':17.3,'sv':'90 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Chicken Sides','item':'Chicken Wings (4 Pc)','veg':false,'cal':566,'prot':33.0,'carbs':28.5,'fat':34.2,'sv':'180 g'},
+// Fries & Sides
+{id:'mc','chain':'McDonald\'s','cat':'Fries & Sides','item':'Regular Fries','veg':true,'cal':216,'prot':3.4,'carbs':27.1,'fat':10.4,'sv':'77 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Fries & Sides','item':'Medium Fries','veg':true,'cal':305,'prot':4.8,'carbs':38.3,'fat':14.7,'sv':'109 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Fries & Sides','item':'Large Fries','veg':true,'cal':431,'prot':6.8,'carbs':54.2,'fat':20.8,'sv':'154 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Fries & Sides','item':'McFlavor Fries','veg':true,'cal':290,'prot':5.2,'carbs':35.6,'fat':15.5,'sv':'110 g'},
+// Desserts
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Soft Serve Cone','veg':true,'cal':86,'prot':2.0,'carbs':15.2,'fat':1.8,'sv':'81 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'McSwirl Mango Dip','veg':true,'cal':150,'prot':2.6,'carbs':27.0,'fat':3.8,'sv':'91 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'McSwirl ChocoDip','veg':true,'cal':160,'prot':2.7,'carbs':26.0,'fat':5.0,'sv':'93 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'McSwirl ButterScotch Dip','veg':true,'cal':174,'prot':2.8,'carbs':28.0,'fat':5.5,'sv':'95 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Sundae Mango (Regular)','veg':true,'cal':194,'prot':3.1,'carbs':34.0,'fat':5.0,'sv':'86 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Sundae Chocolate (Regular)','veg':true,'cal':122,'prot':2.3,'carbs':20.0,'fat':3.5,'sv':'92 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Sundae Strawberry (Regular)','veg':true,'cal':101,'prot':1.5,'carbs':18.0,'fat':2.5,'sv':'92 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Sundae Choc Brownie (Regular)','veg':true,'cal':203,'prot':3.2,'carbs':32.0,'fat':6.5,'sv':'111 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Soft Serve Hot Fudge (Regular)','veg':true,'cal':122,'prot':2.3,'carbs':20.0,'fat':3.5,'sv':'92 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Soft Serve Strawberry (Regular)','veg':true,'cal':101,'prot':1.5,'carbs':18.0,'fat':2.5,'sv':'92 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'McFlurry Oreo (Small)','veg':true,'cal':116,'prot':2.1,'carbs':17.0,'fat':4.0,'sv':'87 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'McFlurry Oreo (Regular)','veg':true,'cal':209,'prot':3.6,'carbs':33.0,'fat':7.0,'sv':'147 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'McFlurry Choco Crunch (Small)','veg':true,'cal':154,'prot':2.6,'carbs':23.0,'fat':6.0,'sv':'94 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'McFlurry Choco Crunch (Regular)','veg':true,'cal':333,'prot':5.0,'carbs':47.0,'fat':14.0,'sv':'167 g'},
+{id:'mc','chain':'McDonald\'s','cat':'Desserts','item':'Black Forest (Regular)','veg':true,'cal':268,'prot':4.4,'carbs':42.0,'fat':10.0,'sv':'115 g'},
+// Beverages
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Coca-Cola (Small)','veg':true,'cal':110,'prot':0.0,'carbs':27.0,'fat':0.0,'sv':'299 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Coca-Cola (Medium)','veg':true,'cal':151,'prot':0.0,'carbs':37.0,'fat':0.0,'sv':'394 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Coca-Cola (Large)','veg':true,'cal':217,'prot':0.0,'carbs':54.0,'fat':0.0,'sv':'544 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Coke Float','veg':true,'cal':139,'prot':1.5,'carbs':29.0,'fat':1.8,'sv':'287 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Fanta Float','veg':true,'cal':152,'prot':1.5,'carbs':32.0,'fat':1.8,'sv':'287 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Cold Coffee','veg':true,'cal':301,'prot':9.8,'carbs':48.0,'fat':8.0,'sv':'300 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Iced Tea','veg':true,'cal':194,'prot':0.2,'carbs':48.0,'fat':0.0,'sv':'400 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Masala Chai (Regular)','veg':true,'cal':94,'prot':1.4,'carbs':17.0,'fat':2.0,'sv':'150 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Chocolate MilkShake','veg':true,'cal':96,'prot':6.5,'carbs':13.0,'fat':2.0,'sv':'180 ml'},
+{id:'mc','chain':'McDonald\'s','cat':'Beverages','item':'Hot Black Coffee','veg':true,'cal':7,'prot':0.0,'carbs':1.0,'fat':0.0,'sv':'200 ml'},
 ];
 
-// Enrich
-const ALL = [];
-const cats = new Set();
-DATA.forEach(c => c.items.forEach(item => {
-  ALL.push({...item, chainName: c.chain, chainColor: c.color, calPerProtein: item.protein > 0 ? Math.round(item.cal / item.protein * 10) / 10 : null});
-  cats.add(item.cat);
-}));
+// ===== STATE =====
+let sortCol = 'cal', sortDir = -1;
+let activeCat = 'all';
 
-// Chain list for About section
-document.getElementById('chainList').innerHTML = DATA.map(c => '<span class="ftag" style="border-left:3px solid '+c.color+'">'+c.chain+'</span>').join(' ');
-
-// Dropdowns
-const cf = document.getElementById('cf');
-DATA.forEach(c => { const o=document.createElement('option'); o.value=c.chain; o.textContent=c.chain+' ('+c.items.length+')'; cf.appendChild(o); });
-const catf = document.getElementById('catf');
-[...cats].sort().forEach(cat => { const o=document.createElement('option'); o.value=cat; o.textContent=cat; catf.appendChild(o); });
-
-// State
-let col='name', dir=1, ftype='all', fchain='', fcat='', q='';
-
-// Sort icons
-const UP = (on) => `<svg width="8" height="5" viewBox="0 0 8 5"><path d="M4 0L8 5H0z" fill="${on?'var(--accent)':'currentColor'}" opacity="${on?1:.25}"/></svg>`;
-const DN = (on) => `<svg width="8" height="5" viewBox="0 0 8 5"><path d="M4 5L0 0H8z" fill="${on?'var(--accent)':'currentColor'}" opacity="${on?1:.25}"/></svg>`;
-
-function refreshIcons() {
-  ['name','chain','cal','protein','calPerProtein','carbs','fat'].forEach(c => {
-    const el = document.getElementById('si-'+c);
-    if (!el) return;
-    const a = col===c;
-    el.innerHTML = UP(a && dir===1) + DN(a && dir===-1);
-    el.closest('th').classList.toggle('active', a);
-  });
-}
-
-function fmt(v) {
-  if (typeof v !== 'number') return '&mdash;';
-  return Number.isInteger(v) ? String(v) : v.toFixed(1);
-}
-
-function calColor(cal) {
-  if (cal < 200) return 'var(--cal-low)';
-  if (cal < 450) return 'var(--cal-mid)';
-  return 'var(--cal-high)';
-}
-function calWidth(cal) {
-  if (cal >= 900) return '100%';
-  return Math.round((cal / 900) * 100) + '%';
-}
-
+// ===== RENDER =====
 function render() {
-  const sq = q.toLowerCase().trim();
-  let rows = ALL.filter(item => {
-    if (ftype!=='all' && item.type!==ftype) return false;
-    if (fchain && item.chainName!==fchain) return false;
-    if (fcat && item.cat!==fcat) return false;
-    if (sq && !item.name.toLowerCase().includes(sq) && !item.chainName.toLowerCase().includes(sq) && !item.cat.toLowerCase().includes(sq)) return false;
-    return true;
-  });
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const chainV = document.getElementById('chainFilter').value;
+  let items = DATA;
 
-  rows.sort((a,b) => {
-    if (col==='name') return dir*a.name.localeCompare(b.name);
-    if (col==='chain') return dir*a.chainName.localeCompare(b.chainName);
-    const av = a[col] ?? -Infinity, bv = b[col] ?? -Infinity;
-    return dir*(av-bv);
-  });
+  // Chain filter
+  if (chainV !== 'all') items = items.filter(d => d.id === chainV);
 
-  document.getElementById('ss').textContent = rows.length;
-  document.getElementById('st').textContent = ALL.length;
-  document.getElementById('sc').textContent = DATA.length;
+  // Category filter
+  if (activeCat !== 'all') items = items.filter(d => d.cat === activeCat);
 
-  const tb = document.getElementById('tb');
-
-  if (!rows.length) {
-    tb.innerHTML = `<tr><td colspan="10" class="empty">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 9h.01M15 9h.01"/></svg><br>No items match your filters.</td></tr>`;
-    refreshIcons(); return;
+  // Search
+  if (q) {
+    items = items.filter(d => d.item.toLowerCase().includes(q) || d.chain.toLowerCase().includes(q) || d.cat.toLowerCase().includes(q));
   }
 
-  // Group headers when browsing (no search/chain/cat filter, name or chain sort)
-  const grouped = !sq && !fchain && !fcat && (col==='name' || col==='chain');
-  let html = '';
+  // Sort
+  items.sort((a, b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
+    return va < vb ? -sortDir : va > vb ? sortDir : 0;
+  });
 
-  if (grouped) {
-    let order = DATA.map(c=>c.chain);
-    if (col==='chain') order = [...order].sort((a,b)=>dir*a.localeCompare(b));
-    order.forEach(chainName => {
-      const cr = rows.filter(r=>r.chainName===chainName);
-      if (!cr.length) return;
-      html += '<tr class="gr"><td colspan="10"><span class="gpip" style="background:'+cr[0].chainColor+'"></span>'+chainName+'<span style="opacity:.45;font-weight:400"> &nbsp;&middot;&nbsp; '+cr.length+' item'+(cr.length>1?'s':'')+'</span></td></tr>';
-      cr.forEach(item => { html += row(item, false); });
-    });
-  } else {
-    rows.forEach(item => { html += row(item, true); });
+  // Stats
+  const chains = new Set(DATA.map(d => d.chain));
+  document.getElementById('stats').innerHTML =
+    `<div><div class="snum">${DATA.length}</div><div class="slbl">Items</div></div>` +
+    `<div><div class="snum">${chains.size}</div><div class="slbl">Chains</div></div>` +
+    `<div><div class="snum">${Math.round(DATA.reduce((s,d)=>s+d.cal,0)/DATA.length)}</div><div class="slbl">Avg Cal</div></div>`;
+
+  // Tbody
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('empty');
+
+  if (!items.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
   }
+  empty.style.display = 'none';
 
-  tb.innerHTML = html;
-  refreshIcons();
+  let html = '', lastGrp = '';
+  for (const d of items) {
+    const grp = d.cat;
+    if (grp !== lastGrp) {
+      html += `<tr class="gr"><td colspan="8">${grp}</td></tr>`;
+      lastGrp = grp;
+    }
+    const pct = d.cal > 1000 ? 100 : Math.round(d.cal / 10);
+    const calColor = d.cal < 200 ? '#2a7a3b' : d.cal < 500 ? '#b87a1a' : '#b83232';
+    const dotClass = d.veg ? 'veg' : 'non-veg';
+    html += `<tr>
+      <td><span class="cc"><span class="vd ${dotClass}"></span><span class="iname">${d.item}</span></span></td>
+      <td><span class="catb">${d.chain}</span></td>
+      <td class="cl">${d.cat}</td>
+      <td><div class="cbar-wrap"><span class="cnum">${d.cal}</span><span class="cbar"><span class="cbar-fill" style="width:${pct}%;background:${calColor}"></span></span></div></td>
+      <td class="cnum">${d.prot.toFixed(1)}g</td>
+      <td class="cnum">${d.carbs.toFixed(1)}g</td>
+      <td class="cnum">${d.fat.toFixed(1)}g</td>
+      <td class="cnum">${d.sv}</td>
+    </tr>`;
+  }
+  tbody.innerHTML = html;
 }
 
-function row(item, showChain) {
-  const cc = calColor(item.cal);
-  const cw = calWidth(item.cal);
-  return '<tr>\
-    <td><div class="vd '+item.type+'" title="'+(item.type==='veg'?'Vegetarian':'Non-vegetarian')+'"></div></td>\
-    <td><div class="iname">'+item.name+'</div></td>\
-    <td>'+(showChain ? '<div class="cc"><span class="cp" style="background:'+item.chainColor+'"></span><span class="cl">'+item.chainName+'</span></div>' : '<span style="color:var(--border)">&mdash;</span>')+'</td>\
-    <td><span class="catb">'+item.cat+'</span></td>\
-    <td class="cal"><div class="cbar-wrap"><span>'+fmt(item.cal)+'</span><span class="cbar"><span class="cbar-fill" style="width:'+cw+';background:'+cc+'"></span></span></div></td>\
-    <td class="pro">'+fmt(item.protein)+'g</td>\
-    <td class="calPerProtein">'+(item.calPerProtein != null ? fmt(item.calPerProtein) : '&mdash;')+'</td>\
-    <td class="crb">'+fmt(item.carbs)+'g</td>\
-    <td class="fat">'+fmt(item.fat)+'g</td>\
-    <td class="note">'+(item.note||'')+'</td>\
-  </tr>';
+// ===== SORT =====
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = -1; }
+  document.querySelectorAll('th.sort').forEach(th => th.classList.toggle('active', th.dataset.col === col));
+  render();
 }
 
-// Events
-document.querySelectorAll('th.sort').forEach(th => {
-  th.addEventListener('click', () => {
-    const c = th.dataset.c;
-    if (col===c) { dir*=-1; }
-    else { col=c; dir = (c==='name'||c==='chain') ? 1 : -1; }
-    render();
-  });
-});
+// ===== CHAIN SELECT =====
+(function() {
+  const chains = [...new Set(DATA.map(d => d.chain))].sort();
+  const sel = document.getElementById('chainFilter');
+  chains.forEach(c => { const o = document.createElement('option'); o.value = DATA.find(d=>d.chain===c).id; o.textContent = c; sel.appendChild(o); });
+})();
 
-document.getElementById('search').addEventListener('input', e => { q=e.target.value; render(); });
-document.getElementById('cf').addEventListener('change', e => { fchain=e.target.value; render(); });
-document.getElementById('catf').addEventListener('change', e => { fcat=e.target.value; render(); });
-document.querySelectorAll('.pill').forEach(p => {
-  p.addEventListener('click', () => {
-    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
-    p.classList.add('active');
-    ftype=p.dataset.t; render();
+// ===== CATEGORY PILLS =====
+(function() {
+  const cats = [...new Set(DATA.map(d => d.cat))].sort();
+  const div = document.getElementById('pills');
+  const all = document.createElement('button');
+  all.className = 'pill active'; all.textContent = 'All'; all.dataset.cat = 'all';
+  all.onclick = () => setCat('all');
+  div.appendChild(all);
+  cats.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'pill'; b.textContent = c; b.dataset.cat = c;
+    b.onclick = () => setCat(c);
+    div.appendChild(b);
   });
-});
+})();
 
+function setCat(c) {
+  activeCat = c;
+  document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.cat === c));
+  render();
+}
+
+// ===== INIT =====
 render();
 </script>
 </body>
